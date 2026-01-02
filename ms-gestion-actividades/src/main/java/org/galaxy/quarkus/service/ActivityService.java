@@ -4,12 +4,15 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.galaxy.quarkus.mapper.ActivityMapper;
+import org.galaxy.quarkus.model.dto.ActivityListResponseDTO;
 import org.galaxy.quarkus.model.dto.CreateActivityRequestDTO;
 import org.galaxy.quarkus.model.dto.CreateActivityResponseDTO;
 import org.galaxy.quarkus.model.entity.ActivityEntity;
 import org.galaxy.quarkus.model.entity.ActivityMemberEntity;
 import org.galaxy.quarkus.repository.ActivityMemberEntityRepository;
 import org.galaxy.quarkus.repository.ActivityRepository;
+
+import java.util.List;
 
 @ApplicationScoped
 public class ActivityService {
@@ -41,5 +44,10 @@ public class ActivityService {
         }
 
         return mapper.toCreateActivityResponseDTO(activity);
+    }
+
+    public List<ActivityListResponseDTO> findAllActivities() {
+        List<ActivityEntity> activities = activityRepository.listAll();
+        return mapper.toActivityListResponseDTOs(activities);
     }
 }

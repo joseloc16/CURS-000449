@@ -34,7 +34,9 @@ public class ActivityResource {
 
     @GET
     public RestResponse<List<ActivityListResponseDTO>> findAll() {
-        return null;
+        return activityService.findAllActivities().isEmpty()
+            ? RestResponse.noContent()
+            : RestResponse.ok(activityService.findAllActivities());
     }
 
     @PUT

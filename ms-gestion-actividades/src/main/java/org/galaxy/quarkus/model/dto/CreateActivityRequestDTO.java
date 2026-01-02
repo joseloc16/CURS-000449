@@ -1,8 +1,8 @@
 package org.galaxy.quarkus.model.dto;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class CreateActivityRequestDTO {
     private String activityType;
 
     @NotNull(message = "La fecha de la actividad es obligatoria")
-    @PastOrPresent(message = "La fecha de la actividad no puede ser futura")
+    @FutureOrPresent(message = "La fecha debe ser hoy o una fecha futura")
     private LocalDate activityDate;
 
     @NotNull(message = "Debe especificarse el ministryId")

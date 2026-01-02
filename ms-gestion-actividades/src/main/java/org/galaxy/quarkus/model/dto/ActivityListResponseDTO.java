@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ActivityListResponseDTO {
     private Long id;
-    private String nombre;
-    private LocalDate fecha;
-    private String estado;
+    private String activityName;
+    private LocalDate activityDate;
+    private String activityStatus;
 }
