@@ -15,7 +15,7 @@ import org.galaxy.quarkus.repository.ActivityRepository;
 public class ActivityService {
 
     @Inject
-    ActivityMapper activityMapper;
+    ActivityMapper mapper;
 
     @Inject
     ActivityRepository activityRepository;
@@ -26,7 +26,7 @@ public class ActivityService {
     @Transactional
     public CreateActivityResponseDTO recordActivity(CreateActivityRequestDTO dto) {
 
-        ActivityEntity activity = activityMapper.toActivityEntity(dto);
+        ActivityEntity activity = mapper.toActivityEntity(dto);
         activityRepository.save(activity);
 
         Long activityId = activity.getId();
@@ -40,6 +40,6 @@ public class ActivityService {
             });
         }
 
-        return null;
+        return mapper.toCreateActivityResponseDTO(activity);
     }
 }

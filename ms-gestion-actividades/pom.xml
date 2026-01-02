@@ -115,6 +115,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Flyway -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-flyway</artifactId>
+        </dependency>
 
         <!-- Testing -->
         <dependency>

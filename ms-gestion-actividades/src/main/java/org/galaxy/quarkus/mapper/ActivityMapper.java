@@ -1,6 +1,7 @@
 package org.galaxy.quarkus.mapper;
 
 import org.galaxy.quarkus.model.dto.CreateActivityRequestDTO;
+import org.galaxy.quarkus.model.dto.CreateActivityResponseDTO;
 import org.galaxy.quarkus.model.entity.ActivityEntity;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
@@ -21,4 +22,9 @@ public interface ActivityMapper {
     @Mapping(target = "ministryId", source = "ministryId")
     @Mapping(target = "status", constant = "PROGRAMADA")
     ActivityEntity toActivityEntity(CreateActivityRequestDTO dto);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "status", source = "status")
+    @Mapping(target = "message", constant = "Activity created successfully")
+    CreateActivityResponseDTO toCreateActivityResponseDTO(ActivityEntity entity);
 }

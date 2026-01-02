@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  mysql-actividades:
+    image: mysql:8.4
+    container_name: mysql-ms-actividades
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: actividades
+    ports:
+      - "3307:3306"
+    networks:
+      - ms-network
+
+  api-actividades:
+    image: ms-gestion-actividades:1.0.0
+    container_name: api-ms-actividades
+    depends_on:
+      - mysql-actividades
+    ports:
+      - "8016:8016"
+    environment:
+      QUARKUS_HTTP_PORT: 8016
+      QUARKUS_DATASOURCE_DB_KIND: mysql
+      QUARKUS_DATASOURCE_USERNAME: root
+      QUARKUS_DATASOURCE_PASSWORD: 123456
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql-ms-actividades:3306/actividades
+    networks:
+      - ms-network
+
+networks:
+  ms-network:
+    driver: bridge

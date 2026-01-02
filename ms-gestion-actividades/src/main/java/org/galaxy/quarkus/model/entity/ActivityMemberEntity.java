@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "activity_members")
+@Table(name = "tbl_activity_members")
 public class ActivityMemberEntity extends PanacheEntityBase {
 
     @Id
