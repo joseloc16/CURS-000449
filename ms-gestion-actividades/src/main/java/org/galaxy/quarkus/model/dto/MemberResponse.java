@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberSummaryDTO {
+public class MemberResponse {
     public Long id;
-    public String nombre;
+    public String name;
 }

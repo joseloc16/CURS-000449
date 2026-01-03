@@ -13,6 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 public class ActivityDetailResponseDTO {
     private ActivityDetailDTO actividad;
-    private MinistrySummaryDTO ministerio;
-    private List<MemberSummaryDTO> miembros;
+    //private MinistrySummaryDTO ministerio;
+    private List<MemberResponse> miembros;
+
+    public static ActivityDetailResponse from(
+        ActivityEntity activity,
+        List<MemberResponse> members
+    ) {
+        ActivityDetailResponse r = new ActivityDetailResponse();
+        r.actividad = new ActivityDto(activity);
+        r.miembros = members;
+        return r;
+    }
 }
