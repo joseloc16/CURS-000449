@@ -3,10 +3,12 @@ package org.galaxy.quarkus.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import org.galaxy.quarkus.mapper.ActivityMapper;
 import org.galaxy.quarkus.model.dto.ActivityListResponseDTO;
 import org.galaxy.quarkus.model.dto.CreateActivityRequestDTO;
 import org.galaxy.quarkus.model.dto.CreateActivityResponseDTO;
+import org.galaxy.quarkus.model.dto.UpdateActivityStatusResponseDTO;
 import org.galaxy.quarkus.model.entity.ActivityEntity;
 import org.galaxy.quarkus.model.entity.ActivityMemberEntity;
 import org.galaxy.quarkus.repository.ActivityMemberEntityRepository;
@@ -49,5 +51,15 @@ public class ActivityService {
     public List<ActivityListResponseDTO> findAllActivities() {
         List<ActivityEntity> activities = activityRepository.listAll();
         return mapper.toActivityListResponseDTOs(activities);
+    }
+
+    @Transactional
+    public UpdateActivityStatusResponseDTO updateActivityStatus(Long id, String status) {
+        ActivityEntity activity = activityRepository.findByIdOptional(id)
+            .orElseThrow(() -> new NotFoundException("Activity not found"));
+
+        activity.setStatus(status);
+
+        return new UpdateActivityStatusResponseDTO("Activity status updated to: " + status);
     }
 }

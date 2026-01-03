@@ -41,8 +41,10 @@ public class ActivityResource {
 
     @PUT
     @Path("/{id}/status")
-    public RestResponse<UpdateActivityStatusResponseDTO> update(@PathParam("id") Long id, UpdateActivityStatusRequestDTO requestMascota) {
-        return null;
+    public RestResponse<UpdateActivityStatusResponseDTO> update(@PathParam("id") Long id, UpdateActivityStatusRequestDTO statusActivity) {
+        return activityService.updateActivityStatus(id, statusActivity.getStatus()) != null
+            ? RestResponse.ok(activityService.updateActivityStatus(id, statusActivity.getStatus()))
+            : RestResponse.noContent();
     }
 
     @GET
