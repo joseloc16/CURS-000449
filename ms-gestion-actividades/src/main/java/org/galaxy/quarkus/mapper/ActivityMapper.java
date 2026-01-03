@@ -1,15 +1,13 @@
 package org.galaxy.quarkus.mapper;
 
-import org.galaxy.quarkus.model.dto.ActivityListResponseDTO;
-import org.galaxy.quarkus.model.dto.CreateActivityRequestDTO;
-import org.galaxy.quarkus.model.dto.CreateActivityResponseDTO;
+import java.util.List;
+import org.galaxy.quarkus.model.dto.*;
 import org.galaxy.quarkus.model.entity.ActivityEntity;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.NullValueCheckStrategy;
-
-import java.util.List;
 
 @Mapper(
     componentModel = "cdi",
@@ -39,4 +37,15 @@ public interface ActivityMapper {
     @Mapping(target = "activityDate", source = "date")
     @Mapping(target = "activityStatus", source = "status")
     ActivityListResponseDTO toActivityListResponseDTO(ActivityEntity entity);
+
+    @Mapping(target = "actividad", source = "entity", qualifiedByName = "toActivityDetail")
+    @Mapping(target = "miembros", source = "members")
+    ActivityDetailResponseDTO toActivityDetailResponseDTO(ActivityEntity entity, List<MemberResponse> members);
+
+    @Named("toActivityDetail")
+    @Mapping(target = "activityId", source = "id")
+    @Mapping(target = "nombre", source = "name")
+    @Mapping(target = "fecha", source = "date")
+    @Mapping(target = "estado", source = "status")
+    ActivityDetailDTO toActivityDetailDTO(ActivityEntity entity);
 }

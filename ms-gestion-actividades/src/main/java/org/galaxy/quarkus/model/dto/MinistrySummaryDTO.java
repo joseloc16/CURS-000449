@@ -11,5 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MinistrySummaryDTO {
     public Long id;
-    public String nombre;
+    public String ministryName;
 }

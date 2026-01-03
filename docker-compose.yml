@@ -12,19 +12,45 @@ services:
     networks:
       - ms-network
 
+  mysql-miembros:
+    image: mysql:8.4
+    container_name: mysql-ms-miembros
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: miembros
+    ports:
+      - "3309:3306"
+    networks:
+      - ms-network
+
+  api-miembros:
+    image: ms-gestion-miembros:1.0.0
+    container_name: api-ms-miembros
+    depends_on:
+      - mysql-miembros
+    ports:
+      - "8020:8020"
+    environment:
+      QUARKUS_HTTP_PORT: 8020
+      QUARKUS_DATASOURCE_DB_KIND: mysql
+      QUARKUS_DATASOURCE_USERNAME: root
+      QUARKUS_DATASOURCE_PASSWORD: 123456
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql-ms-miembros:3306/miembros
+    networks:
+      - ms-network
+
   api-actividades:
     image: ms-gestion-actividades:1.0.0
     container_name: api-ms-actividades
     depends_on:
       - mysql-actividades
+      - api-miembros
     ports:
       - "8016:8016"
     environment:
       QUARKUS_HTTP_PORT: 8016
-      QUARKUS_DATASOURCE_DB_KIND: mysql
-      QUARKUS_DATASOURCE_USERNAME: root
-      QUARKUS_DATASOURCE_PASSWORD: 123456
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql-ms-actividades:3306/actividades
+      QUARKUS_REST_CLIENT_MEMBERS_API_URL: http://api-miembros:8020
     networks:
       - ms-network
 

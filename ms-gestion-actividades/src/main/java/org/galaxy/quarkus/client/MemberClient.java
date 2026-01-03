@@ -1,19 +1,19 @@
 package org.galaxy.quarkus.client;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-import org.galaxy.quarkus.model.dto.MemberSummaryDTO;
+import org.galaxy.quarkus.model.dto.MemberResponse;
+
+import java.util.List;
 
 @Path("/members")
-@RegisterRestClient(configKey = "clientes-api")
+@RegisterRestClient(configKey = "members-api")
 @Consumes(MediaType.APPLICATION_JSON)
-public interface MemberDao {
+@Produces(MediaType.APPLICATION_JSON)
+public interface MemberClient {
 
-    @GET
-    @Path("/{id}")
-    MemberSummaryDTO findById(@PathParam("id") Long id);
+    @POST
+    @Path("/by-ids")
+    List<MemberResponse> getMembersByIds(List<Long> ids);
 }

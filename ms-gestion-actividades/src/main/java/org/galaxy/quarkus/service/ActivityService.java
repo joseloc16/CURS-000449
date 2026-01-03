@@ -4,11 +4,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+import org.galaxy.quarkus.dao.impl.MemberDaoImpl;
 import org.galaxy.quarkus.mapper.ActivityMapper;
-import org.galaxy.quarkus.model.dto.ActivityListResponseDTO;
-import org.galaxy.quarkus.model.dto.CreateActivityRequestDTO;
-import org.galaxy.quarkus.model.dto.CreateActivityResponseDTO;
-import org.galaxy.quarkus.model.dto.UpdateActivityStatusResponseDTO;
+import org.galaxy.quarkus.model.dto.*;
 import org.galaxy.quarkus.model.entity.ActivityEntity;
 import org.galaxy.quarkus.model.entity.ActivityMemberEntity;
 import org.galaxy.quarkus.repository.ActivityMemberEntityRepository;
@@ -26,7 +24,10 @@ public class ActivityService {
     ActivityRepository activityRepository;
 
     @Inject
-    ActivityMemberEntityRepository activityMemberEntityRepository;
+    ActivityMemberEntityRepository activityMemberRepository;
+
+    @Inject
+    MemberDaoImpl memberDao;
 
     @Transactional
     public CreateActivityResponseDTO recordActivity(CreateActivityRequestDTO dto) {
@@ -41,7 +42,7 @@ public class ActivityService {
                 ActivityMemberEntity am = new ActivityMemberEntity();
                 am.setActivityId(activityId);
                 am.setMemberId(memberId);
-                activityMemberEntityRepository.save(am);
+                activityMemberRepository.save(am);
             });
         }
 
@@ -61,5 +62,24 @@ public class ActivityService {
         activity.setStatus(status);
 
         return new UpdateActivityStatusResponseDTO("Activity status updated to: " + status);
+    }
+
+    public ActivityDetailResponseDTO getActivityDetail(Long activityId) {
+
+        ActivityEntity activity = activityRepository.findByIdOptional(activityId)
+            .orElseThrow(() -> new NotFoundException("Activity not found"));
+
+        List<ActivityMemberEntity> relations =
+            activityMemberRepository.findByActivityId(activityId);
+
+        List<Long> memberIds = relations.stream()
+            .map(ActivityMemberEntity::getMemberId)
+            .toList();
+
+        List<MemberResponse> members =
+            memberIds.isEmpty() ? List.of()
+                : memberDao.getMembersByIds(memberIds);
+
+        return mapper.toActivityDetailResponseDTO(activity, members);
     }
 }

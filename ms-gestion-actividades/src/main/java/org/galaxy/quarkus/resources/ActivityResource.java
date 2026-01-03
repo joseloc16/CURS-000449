@@ -50,6 +50,8 @@ public class ActivityResource {
     @GET
     @Path("/{id}/detail")
     public RestResponse<ActivityDetailResponseDTO> getActivityDetail(@PathParam("id") Long id) {
-        return null;
+        return activityService.getActivityDetail(id) != null
+            ? RestResponse.ok(activityService.getActivityDetail(id))
+            : RestResponse.noContent();
     }
 }
